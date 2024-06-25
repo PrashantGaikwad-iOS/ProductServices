@@ -1,16 +1,13 @@
 package org.example.prashant.productservices.Controllers;
 
 import org.example.prashant.productservices.DTOs.CreateProductRequestDTO;
-import org.example.prashant.productservices.Models.Category;
 import org.example.prashant.productservices.Models.Product;
-import org.example.prashant.productservices.Services.FakeStoreProductService;
-import org.example.prashant.productservices.Services.OwnDatabaseProductService;
 import org.example.prashant.productservices.Services.ProductService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,7 +15,7 @@ public class ProductController {
 
     private ProductService ps;
 
-    public ProductController(ProductService productService) {
+    public ProductController(@Qualifier("selfProductService") ProductService productService) {
         this.ps = productService;
     }
 
