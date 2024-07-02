@@ -1,6 +1,7 @@
 package org.example.prashant.productservices.Controllers;
 
 import org.example.prashant.productservices.DTOs.CreateProductRequestDTO;
+import org.example.prashant.productservices.Models.Category;
 import org.example.prashant.productservices.Models.Product;
 import org.example.prashant.productservices.Services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,20 +35,20 @@ public class ProductController {
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getAllProducts() {
         List<Product> products = ps.getAllProducts();
-        ResponseEntity<List<Product>> response = new ResponseEntity<>(products, HttpStatus.NOT_FOUND);
+        ResponseEntity<List<Product>> response = new ResponseEntity<>(products, HttpStatus.OK);
         return response;
     }
 
     @GetMapping("/products/category/{category}")
     public ResponseEntity<List<Product>> getAllProductsForCategory(@PathVariable("category") String category) {
         List<Product> products = ps.getAllProductsForCategory(category);
-        ResponseEntity<List<Product>> response = new ResponseEntity<>(products, HttpStatus.NOT_FOUND);
+        ResponseEntity<List<Product>> response = new ResponseEntity<>(products, HttpStatus.OK);
         return response;
     }
     @GetMapping("/categories")
-    public ResponseEntity<String[]> getAllCategories() {
-        String[] categories = ps.getAllCategories();
-        return new ResponseEntity<>(categories, HttpStatus.NOT_FOUND);
+    public ResponseEntity<List<String>> getAllCategories() {
+        List<String> categories= ps.getAllCategories();
+        return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
     @PutMapping("/products/{id}")
@@ -64,7 +65,6 @@ public class ProductController {
     @DeleteMapping("/products/{id}")
     public void deleteProduct(@PathVariable("id") Long productId) {
         ps.deleteProduct(productId);
-//        return new ResponseEntity<>(product, HttpStatus.NOT_FOUND);
     }
 }
 

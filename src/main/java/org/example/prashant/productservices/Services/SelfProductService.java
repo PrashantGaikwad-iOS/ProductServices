@@ -1,11 +1,15 @@
 package org.example.prashant.productservices.Services;
 
+import org.example.prashant.productservices.DTOs.FakeStoreProductDTO;
+import org.example.prashant.productservices.DTOs.SelfDBProductDTO;
 import org.example.prashant.productservices.Models.Category;
 import org.example.prashant.productservices.Models.Product;
 import org.example.prashant.productservices.Repositories.CategoryRepository;
 import org.example.prashant.productservices.Repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 @Service("selfProductService")
 public class SelfProductService implements ProductService{
@@ -19,12 +23,12 @@ public class SelfProductService implements ProductService{
     }
     @Override
     public Product getSingleProduct(Long productId) {
-        return null;
+        return productRepository.findByIdIs(productId);
     }
 
     @Override
     public List<Product> getAllProducts() {
-        return null;
+        return productRepository.findAll();
     }
 
     @Override
@@ -55,8 +59,13 @@ public class SelfProductService implements ProductService{
     }
 
     @Override
-    public String[] getAllCategories() {
-        return null;
+    public List<String> getAllCategories() {
+        List<Category> categoris =  categoryRepository.findAll();
+        List<String> titles = new ArrayList<>(categoris.size());
+        for (Category object : categoris) {
+            titles.add(object.getTitle());
+        }
+        return titles;
     }
 
     @Override
@@ -66,15 +75,25 @@ public class SelfProductService implements ProductService{
                                  String category,
                                  double price,
                                  String image) {
-        return null;
+        SelfDBProductDTO selfDBProductDTO = new SelfDBProductDTO();
+        selfDBProductDTO.setTitle(title);
+        selfDBProductDTO.setDescription(description);
+        selfDBProductDTO.setCategory(category);
+        selfDBProductDTO.setPrice(price);
+        selfDBProductDTO.setImage(image);
+
+        productRepository.save(selfDBProductDTO.toProduct());
+
+        return selfDBProductDTO.toProduct();
     }
 
     @Override
     public List<Product> getAllProductsForCategory(String category) {
-        return null;
+        return productRepository.findAllByCategoryTitle(category);
     }
 
     @Override
     public void deleteProduct(Long productId) {
+        productRepository.deleteById(productId);
     }
 }
