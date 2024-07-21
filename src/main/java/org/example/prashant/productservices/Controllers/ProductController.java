@@ -1,6 +1,8 @@
 package org.example.prashant.productservices.Controllers;
 
 import org.example.prashant.productservices.DTOs.CreateProductRequestDTO;
+import org.example.prashant.productservices.DTOs.ErrorDTO;
+import org.example.prashant.productservices.Exceptions.ProductNotFoundException;
 import org.example.prashant.productservices.Models.Category;
 import org.example.prashant.productservices.Models.Product;
 import org.example.prashant.productservices.Services.ProductService;
@@ -17,7 +19,7 @@ public class ProductController {
 
     private ProductService ps;
 
-    public ProductController(@Qualifier("selfProductService") ProductService productService) {
+    public ProductController(@Qualifier("fakeStoreProductService") ProductService productService) {
         this.ps = productService;
     }
 
@@ -31,7 +33,7 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    public Product getProductDetails(@PathVariable("id") Long productId) {
+    public Product getProductDetails(@PathVariable("id") Long productId) throws ProductNotFoundException {
         return ps.getSingleProduct(productId);
     }
 
@@ -76,5 +78,12 @@ public class ProductController {
     public void deleteProduct(@PathVariable("id") Long productId) {
         ps.deleteProduct(productId);
     }
+
+//    @ExceptionHandler(ProductNotFoundException.class)
+//    public ResponseEntity<ErrorDTO> handleProductNotFoundException(Exception exception) {
+//        ErrorDTO errorDTO = new ErrorDTO();
+//        errorDTO.setMessage(exception.getMessage());
+//        return new ResponseEntity<>(errorDTO, HttpStatus.NOT_FOUND);
+//    }
 }
 

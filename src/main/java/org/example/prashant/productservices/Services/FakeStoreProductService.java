@@ -1,6 +1,7 @@
 package org.example.prashant.productservices.Services;
 
 import org.example.prashant.productservices.DTOs.FakeStoreProductDTO;
+import org.example.prashant.productservices.Exceptions.ProductNotFoundException;
 import org.example.prashant.productservices.Models.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,14 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public Product getSingleProduct(Long productId) {
+    public Product getSingleProduct(Long productId) throws ProductNotFoundException {
         FakeStoreProductDTO fakeStoreProductDto = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/" + productId,
                 FakeStoreProductDTO.class);
+
+        if(fakeStoreProductDto == null) {
+            throw new ProductNotFoundException("Product with given Id not found. Please try some other productId");
+        }
 
         return fakeStoreProductDto.toProduct();
     }
