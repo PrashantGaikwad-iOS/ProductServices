@@ -5,6 +5,7 @@ import org.example.prashant.productservices.Models.Category;
 import org.example.prashant.productservices.Models.Product;
 import org.example.prashant.productservices.Services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,15 +29,23 @@ public class ProductController {
                 request.getPrice(),
                 request.getImage());
     }
+
     @GetMapping("/products/{id}")
     public Product getProductDetails(@PathVariable("id") Long productId) {
         return ps.getSingleProduct(productId);
     }
+
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getAllProducts() {
         List<Product> products = ps.getAllProducts();
         ResponseEntity<List<Product>> response = new ResponseEntity<>(products, HttpStatus.OK);
         return response;
+    }
+
+    @GetMapping("/productsByPage/{pageSize}/{pageNumber}/{sort}")
+    public ResponseEntity<List<Product>> getAllProductsByPage(@PathVariable("pageSize") int pageSize, @PathVariable("pageNumber") int pageNumber, @PathVariable("sort") String sort) {
+        Page<Product> products = ps.getAllProductsByPage(pageSize, pageNumber, sort);
+        return new ResponseEntity<>(products.getContent(), HttpStatus.OK);
     }
 
     @GetMapping("/products/category/{category}")
@@ -45,6 +54,7 @@ public class ProductController {
         ResponseEntity<List<Product>> response = new ResponseEntity<>(products, HttpStatus.OK);
         return response;
     }
+
     @GetMapping("/categories")
     public ResponseEntity<List<String>> getAllCategories() {
         List<String> categories= ps.getAllCategories();

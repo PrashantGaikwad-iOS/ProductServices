@@ -2,6 +2,7 @@ package org.example.prashant.productservices.Services;
 
 import org.example.prashant.productservices.DTOs.FakeStoreProductDTO;
 import org.example.prashant.productservices.Models.Product;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -39,6 +40,11 @@ public class FakeStoreProductService implements ProductService{
         }
 
         return products;
+    }
+
+    @Override
+    public Page<Product> getAllProductsByPage(Integer pageSize, Integer pageNumber, String sort) {
+        return null;
     }
 
     @Override

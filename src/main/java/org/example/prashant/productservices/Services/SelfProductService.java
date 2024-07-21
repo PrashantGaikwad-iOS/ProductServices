@@ -6,6 +6,10 @@ import org.example.prashant.productservices.Models.Category;
 import org.example.prashant.productservices.Models.Product;
 import org.example.prashant.productservices.Repositories.CategoryRepository;
 import org.example.prashant.productservices.Repositories.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,6 +33,19 @@ public class SelfProductService implements ProductService{
     @Override
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+
+    @Override
+    public Page<Product> getAllProductsByPage(Integer pageSize, Integer pageNumber, String sort) {
+        Pageable pageable = null;
+
+        if(sort != null) {
+            pageable = PageRequest.of(pageNumber,pageSize, Sort.Direction.ASC, sort);
+        } else {
+            pageable = PageRequest.of(pageNumber, pageSize);
+        }
+
+        return productRepository.findAll(pageable);
     }
 
     @Override
